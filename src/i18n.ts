@@ -1,4 +1,3 @@
-import type { BiologicEntityName } from "@bridg/api-ts";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import "dayjs/locale/ru";
@@ -35,20 +34,5 @@ i18next
 i18next.services.formatter!.add("dayjsDuration", (value: Duration, lng) => {
   return value.locale(lng!).humanize();
 });
-
-// FIXME: Add option for components orders
-i18next.services.formatter!.add(
-  "entityName",
-  (
-    en: BiologicEntityName | null,
-    lng,
-    { defaultValue }: { defaultValue: string }
-  ) => {
-    if (!en) return defaultValue;
-    const parts = [en.family, en.given, en.middle || en.patronymic];
-    const s = parts.filter((x) => x).join(" ");
-    return s || defaultValue;
-  }
-);
 
 export default i18next;

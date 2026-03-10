@@ -5,27 +5,21 @@ import {
   Flex,
   Group,
   Menu,
-  MenuItem,
+
   Switch,
-  Text,
+
   Title,
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
 import { IconCaretDownFilled } from "@tabler/icons-react";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   Link,
   Outlet,
 } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import api from "@/api";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
-import Error from "@/components/Error";
-import MenuItemLink from "@/components/MenuItemLink";
-import { languages } from "@/i18n";
-import logo from "@/logo.png";
 
 function LanguageSwitcher() {
   const { i18n } = useTranslation();
@@ -36,26 +30,11 @@ function LanguageSwitcher() {
           {i18n.resolvedLanguage?.toUpperCase()}
         </Button>
       </Menu.Target>
-      <Menu.Dropdown>
-        {languages.map((lang) => (
-          <MenuItem key={lang} onClick={() => void i18n.changeLanguage(lang)}>
-            {lang.toUpperCase()}
-          </MenuItem>
-        ))}
-      </Menu.Dropdown>
     </Menu>
   );
 }
 
 function Nav() {
-  const { spaceId }: { spaceId?: string } = Route.useParams();
-  const spaces = useQuery({
-    queryKey: ["space"],
-    queryFn: () => api.listSpace(),
-  });
-  const space = spaces.data?.find((s) => s.id == spaceId);
-  const { t } = useTranslation();
-  const spaceTitle = space?.label || t("branding");
   return (
     <Menu
       shadow="sm"
@@ -67,30 +46,16 @@ function Nav() {
       <Menu.Target>
         <Button variant="transparent" px={0} size="xl">
           <Group gap={0}>
-            {spaceTitle}
             <IconCaretDownFilled />
           </Group>
         </Button>
       </Menu.Target>
-      <Menu.Dropdown>
-        {spaces.data?.map((s) => (
-          <MenuItemLink
-            key={s.id}
-            to="/spaces/$spaceId/subjects"
-            params={{ spaceId: s.id }}
-          >
-            <Text size="sm" fw={500}>
-              {s.label || t("StudyProtocolVersion.defaultLabel")}
-            </Text>
-          </MenuItemLink>
-        ))}
-      </Menu.Dropdown>
     </Menu>
   );
 }
 
 function Logo() {
-  return <img src={logo} width={32} />;
+  return <img />;
 }
 
 function ThemeSwitcher() {
@@ -139,7 +104,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <Header />
       </AppShell.Header>
       <AppShell.Main>
-        <Breadcrumbs />
+
         {children}
       </AppShell.Main>
     </AppShell>
@@ -156,9 +121,5 @@ export const Route = createRootRouteWithContext<RouteContext>()({
       <Outlet />
     </Layout>
   ),
-  errorComponent: (props) => (
-    <Layout>
-      <Error {...props} />
-    </Layout>
-  ),
+
 });
