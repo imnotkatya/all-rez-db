@@ -1,6 +1,5 @@
 volumes:
   mssql-data:
-
 services:
   app:
     build:
@@ -13,11 +12,10 @@ services:
       db:
         condition: service_healthy
     networks:
-          - app-network
+      - app-network
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: mssql_dev
-
     platform: linux/amd64
     environment:
       - ACCEPT_EULA=Y
@@ -26,7 +24,6 @@ services:
       - "1433:1433"
     volumes:
       - mssql-data:/var/opt/mssql
-
     healthcheck:
       test:
         [
@@ -48,7 +45,7 @@ services:
       retries: 10
       start_period: 60s
     networks:
-          - app-network
+      - app-network
 networks:
   app-network:
     driver: bridge
