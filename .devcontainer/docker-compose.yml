@@ -12,7 +12,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
+    networks:
+          - app-network
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: mssql_dev
@@ -46,3 +47,8 @@ services:
       timeout: 10s
       retries: 10
       start_period: 60s
+    networks:
+          - app-network
+networks:
+  app-network:
+    driver: bridge
